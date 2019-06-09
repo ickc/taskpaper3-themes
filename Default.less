@@ -1,0 +1,290 @@
+// Base -----------------------------------
+@font-family: "Consolas";
+@base-font-size: 16;
+@user-font-size: $USER_FONT_SIZE;
+@ui-scale: @user-font-size / @base-font-size;
+@line-height-multiple: 1.2;
+@syntax-hue: 193;
+@syntax-saturation: 90%;
+@syntax-brightness: 16%;
+
+// Monochrome -----------------------------------
+@mono-1: hsl(@syntax-hue, 14%, 80%); // Mischka or Cadet Blue, default text
+@mono-2: hsl(@syntax-hue, 9%, 55%); // Light Slate Grey or Oslo Gray
+@mono-3: hsl(@syntax-hue, 10%, 60%); // Shuttle Grey
+
+
+// Colors -----------------------------------
+@c-base03: hsl(197, 61%, 13%);
+@c-base02: hsl(196, 51%, 17%);
+@c-base01: hsl(198, 12%, 41%);
+@c-base00: HSL(197, 11%, 46%);
+@c-base0: HSL(188, 7%, 56%);
+@c-base1: HSL(180, 6%, 64%);
+@c-base2: HSL(46, 38%, 89%);
+@c-base3: HSL(44, 79%, 94%);
+@c-yellow: HSL(43, 59%, 43%);
+@c-orange: HSL(17, 65%, 45%);
+@c-red: HSL(4, 60%, 51%);
+@c-magenta: HSL(332, 52%, 52%);
+@c-violet: HSL(234, 39%, 58%);
+@c-blue: HSL(208, 58%, 53%);
+@c-cyan: HSL(175, 34%, 46%);
+@c-green: HSL(68, 53%, 39%);
+
+// Base colors -----------------------------------
+@project-color:  @c-base0;
+@text-color: @c-base0;
+@bg-color: @c-base03;
+@message-color: mix(@text-color, @bg-color, 50%);
+@tag-color: @c-base00;
+
+// UI Colors -----------------------------------
+@tint-color: @c-base03;
+@interface-color: @tint-color;
+@selection-color: @c-base02; // Blue Zodiac or Bright Gray
+@invisibles-color: fade(@tint-color, 50%);
+@guide-color: @c-base01;
+
+window {
+  appearance: NSAppearanceNameVibrantDark;
+}
+editor {
+    color: @text-color;
+    font-size: @user-font-size;
+    font-family: @font-family;
+    background-color: @bg-color;
+    line-height-multiple: @line-height-multiple;
+    item-handle-size: 6;
+    item-indent: 20px * @ui-scale;
+    caret-width: 2px;
+    caret-color: @c-base0;
+    handle-color: @guide-color;
+    drop-indicator-color: @tint-color;
+    invisibles-color: @invisibles-color;
+    selection-background-color: @selection-color;
+    guide-line-width: 1;
+    guide-line-color: mix(@guide-color,@bg-color, 40%);
+    message-color: @message-color;
+    // top-padding-percent: 25%; // Pad top of editor with 25% of viewport height
+    // bottom-padding-percent: 50%; // Pad bottom of editor with 25% of viewport height
+    // editor-wrap-to-column: 80; // Wrap editor text at 80 columns, center if extra space
+    // item-wrap-to-column: 60; // Wrap item text at 60 columns (smaller value them above means item text doesn't rewrap when item is indented
+    typewriter-scroll-percent: 50%; // Scroll edit location to 50% location in viewport when possible
+}
+item[depth=1][data-type=project] {
+    font-weight: bold;
+    font-size: @user-font-size*1.5;
+    color: @c-base1;
+    paragraph-spacing-before: 20;
+    paragraph-spacing-after: 3;
+}
+item[depth=2][data-type=project] {
+    font-weight: bold;
+    font-size: @user-font-size*1.2;
+    color: @project-color;
+    paragraph-spacing-before: 20;
+    paragraph-spacing-after: 3;
+}
+item[depth=3][data-type=project] {
+    font-weight: semi-bold;
+    font-size: @user-font-size*1.1;
+    color: @project-color;
+    paragraph-spacing-before: 20;
+    paragraph-spacing-after: 3;
+}
+item[depth=4][data-type=project] {
+    font-weight: semi-bold;
+    font-size: @user-font-size*1.1;
+    color: @project-color;
+    paragraph-spacing-before: 12;
+    paragraph-spacing-after: 3;
+}
+item[depth=5][data-type=project] {
+    font-weight: semi-bold;
+    font-size: @user-font-size*1;
+    color: @project-color;
+    paragraph-spacing-before: 8;
+    paragraph-spacing-after: 3;
+}
+item[data-type="task"] {
+    font-style: normal;
+}
+item[data-type="note"] {
+    font-style: italic;
+    font-size: 14;
+    color: @c-base01;
+    line-height-multiple: 1.1;
+    paragraph-spacing-after: 5;
+}
+
+sidebar {
+    search-item-prefix: "🔍 ";
+}
+
+
+// Handle styles -----------------------------------
+item {
+  handle-color: none;
+  handle-border-color: @guide-color ;
+  handle-border-width: 0.5;
+  handle-size: 10;
+  // handle-border-width: floor(1 * @ui-scale);
+}
+
+item[collapsed] {
+  handle-color: @project-color;
+  handle-border-color: @project-color;
+}
+
+item[filtered] {
+  handle-color: @tag-color;
+  handle-border-color: @tag-color;
+}
+
+item[focused] {
+  handle-color: @c-orange;
+  handle-border-color: @c-orange;
+  font-style: italic;
+}
+
+item[empty] {
+  handle-color: none;
+  handle-border-color: none;
+}
+
+item[leaf] {
+  handle-color: none;
+  handle-border-color: none;
+}
+item[collapsed] {
+  text-underline: NSUnderlineStyleSingle;
+}
+
+
+// Tag styles -----------------------------------
+
+
+item[data-today],
+item[data-active],
+item[data-now] {
+    font-size: @user-font-size;
+    font-style: normal;
+    font-weight: normal;
+    color: @c-blue;
+    > run[tag] {
+//        color: darken(@c-blue, 10%);
+    }
+}
+item[data-flag],
+item[data-high],
+item[data-hot],
+{
+    font-size: @user-font-size;
+    font-style: normal;
+    font-weight: normal;
+    color: @c-yellow;
+    > run[tag] {
+//        color: darken(@c-yellow, 10%);
+    }
+}
+item[data-priority="1"] {
+  > run[tag="data-priority"] {
+    color: @c-red;
+  }
+}
+
+item[data-priority="2"] {
+  > run[tag="data-priority"] {
+    color: @c-yellow;
+  }
+}
+
+item[data-priority="3"] {
+  > run[tag="data-priority"] {
+    color: @c-green;
+  }
+}
+item[data-due] {
+    font-size: @user-font-size;
+    font-style: normal;
+    font-weight: normal;
+//    color: @c-orange;
+    > run[tag] {
+        color: darken(@c-orange, 0%);
+    }
+}
+item[data-next] {
+    font-size: @user-font-size;
+    font-style: normal;
+    font-weight: normal;
+//    color: @c-green;
+    > run[tag] {
+        color: darken(@c-green, 0%);
+    }
+}
+item[data-errand] {
+    font-size: @user-font-size;
+    font-style: normal;
+    font-weight: normal;
+//    color: @c-cyan;
+    > run[tag] {
+        color: darken(@c-cyan, 0%);
+    }
+}
+item[data-waiting] {
+    font-size: @user-font-size;
+    font-style: italic;
+    font-weight: normal;
+    color: @c-base01;
+    > run[tag] {
+        color: darken(@c-base00, 10%);
+    }
+}
+
+item[data-done] {
+    > run[content] {
+        text-strikethrough: NSUnderlineStyleSingle;
+        text-strikethrough-color: HSL(186, 8%, 38%);
+        color: HSL(195, 16%, 33%);
+    }
+    > run[tag] {
+        text-strikethrough: NSUnderlineStyleSingle;
+        text-strikethrough-color: fade(HSL(186, 8%, 33%), 90%);
+        color: fade(HSL(186, 8%, 33%), 80%);
+    }
+}
+//item[mouseOver] {
+//	background-color: HSL(47, 41%, 86%);
+//	color: HSL(196, 15%, 38%);
+//}
+item[mouseOver][data-flag]{
+	background-color:@c-yellow;
+	color:@c-base02;
+}
+item[mouseOver][data-today]{
+	background-color: @c-blue;
+	color: @c-base02;
+}
+item[mouseOver][data-type=project]{
+	background-color: @c-base01;
+	color: @c-base1;
+}
+
+
+run[link] {
+    cursor: pointer;
+    color: @c-cyan;
+}
+run[lead] {
+    color: darken(@c-blue, 10%);
+}
+run[link^="filter"] {
+    color: @text-color;
+}
+run[tag] {
+    font-size: @user-font-size;
+    font-style: italic;
+    font-weight: normal;
+    color: @tag-color;
+}
